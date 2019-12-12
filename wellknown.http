@@ -1,2 +1,3 @@
 @instance = "id.zdata.no"
-GET https://{{instance}}/.well-known/openid-configuration
+
+GET https://id.zdata.no/.well-known/openid-configuration

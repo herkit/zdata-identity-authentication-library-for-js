@@ -50,13 +50,13 @@ describe('Adal', function () {
     var angularMock = {};
     var conf = { loginResource: 'defaultResource', tenant: 'testtenant', clientId: 'e9a5a8b6-8af7-4719-9821-0deef255f68e', navigateToLoginRequestUrl: true };
     var testPage = 'this is a song';
-    var STORAGE_PREFIX = 'adal';
+    var STORAGE_PREFIX = 'zidal';
     var STORAGE_ACCESS_TOKEN_KEY = STORAGE_PREFIX + '.access.token.key';
     var STORAGE_EXPIRATION_KEY = STORAGE_PREFIX + '.expiration.key';
     var STORAGE_TOKEN_KEYS = STORAGE_PREFIX + '.token.keys';
     var RESOURCE1 = 'token.resource1';
     var SECONDS_TO_EXPIRE = 3600;
-    // ZData AS: altered DEFAULT_INSTANCE
+    // zidal: altered DEFAULT_INSTANCE
     var DEFAULT_INSTANCE = "https://id.zdata.no/";
     var IDTOKEN_MOCK = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjVUa0d0S1JrZ2FpZXpFWTJFc0xDMmdPTGpBNCJ9.eyJhdWQiOiJlOWE1YThiNi04YWY3LTQ3MTktOTgyMS0wZGVlZjI1NWY2OGUiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLXBwZS5uZXQvNTJkNGIwNzItOTQ3MC00OWZiLTg3MjEtYmMzYTFjOTkxMmExLyIsImlhdCI6MTQxMTk1OTAwMCwibmJmIjoxNDExOTU5MDAwLCJleHAiOjE0MTE5NjI5MDAsInZlciI6IjEuMCIsInRpZCI6IjUyZDRiMDcyLTk0NzAtNDlmYi04NzIxLWJjM2ExYzk5MTJhMSIsImFtciI6WyJwd2QiXSwib2lkIjoiZmEzYzVmYTctN2Q5OC00Zjk3LWJmYzQtZGJkM2E0YTAyNDMxIiwidXBuIjoidXNlckBvYXV0aGltcGxpY2l0LmNjc2N0cC5uZXQiLCJ1bmlxdWVfbmFtZSI6InVzZXJAb2F1dGhpbXBsaWNpdC5jY3NjdHAubmV0Iiwic3ViIjoiWTdUbXhFY09IUzI0NGFHa3RjbWpicnNrdk5tU1I4WHo5XzZmbVc2NXloZyIsImZhbWlseV9uYW1lIjoiYSIsImdpdmVuX25hbWUiOiJ1c2VyIiwibm9uY2UiOiI4MGZmYTkwYS1jYjc0LTRkMGYtYTRhYy1hZTFmOTNlMzJmZTAiLCJwd2RfZXhwIjoiNTc3OTkxMCIsInB3ZF91cmwiOiJodHRwczovL3BvcnRhbC5taWNyb3NvZnRvbmxpbmUuY29tL0NoYW5nZVBhc3N3b3JkLmFzcHgifQ.WHsl8TH1rQ3dQbRkV0TS6GBVAxzNOpG3nGG6mpEBCwAOCbyW6qRsSoo4qq8I5IGyerDf2cvcS-zzatHEROpRC9dcpwkRm6ta5dFZuouFyZ_QiYVKSMwfzEC_FI-6p7eT8gY6FbV51bp-Ah_WKJqEmaXv-lqjIpgsMGeWDgZRlB9cPODXosBq-PEk0q27Be-_A-KefQacJuWTX2eEhECLyuAu-ETVJb7s19jQrs_LJXz_ISib4DdTKPa7XTBDJlVGdCI18ctB67XwGmGi8MevkeKqFI8dkykTxeJ0MXMmEQbE6Fw-gxmP7uJYbZ61Jqwsw24zMDMeXatk2VWMBPCuhA';
     var STATE = '33333333-3333-4333-b333-333333333333';
@@ -175,7 +175,7 @@ describe('Adal', function () {
         spyOn(adal, 'promptUser');
         adal.login();
         // ZData: removed tenant
-        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + '/connect/authorize?response_type=id_token&client_id=client&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333'
+        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=id_token&client_id=client&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333'
             + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&nonce=33333333-3333-4333-b333-333333333333');
         expect(adal.config.state).toBe('33333333-3333-4333-b333-333333333333');
     });
@@ -201,7 +201,8 @@ describe('Adal', function () {
         adal.config.displayCall = displayCallback;
         spyOn(adal.config, 'displayCall');
         adal.login();
-        expect(adal.config.displayCall).toHaveBeenCalledWith(DEFAULT_INSTANCE + conf.tenant + '/oauth2/authorize?response_type=id_token&client_id=client&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333'
+        // zidal: removed tenant
+        expect(adal.config.displayCall).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=id_token&client_id=client&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333'
             + '&client-request-id=33333333-3333-4333-b333-333333333333'
             + adal._addLibMetadata()
             + '&nonce=33333333-3333-4333-b333-333333333333'
@@ -258,7 +259,8 @@ describe('Adal', function () {
         }, 'iframe src not updated', 2000);
 
         runs(function () {
-            expect(mockFrames['adalRenewFrame' + RESOURCE1].src).toBe(DEFAULT_INSTANCE + conf.tenant + '/oauth2/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
+            // zidal: removed tenant
+            expect(mockFrames['adalRenewFrame' + RESOURCE1].src).toBe(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
                 + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&prompt=none&login_hint=test%40testuser.com&domain_hint=testuser.com');
         });
 
@@ -293,7 +295,8 @@ describe('Adal', function () {
         }, 'iframe src not updated', 2000);
 
         runs(function () {
-            expect(mockFrames['adalRenewFrame' + RESOURCE1].src).toBe(DEFAULT_INSTANCE + conf.tenant + '/oauth2/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
+            // zidal: changed autorize endpoint, removed tenant
+            expect(mockFrames['adalRenewFrame' + RESOURCE1].src).toBe(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
                 + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&prompt=none&login_hint=test%40testuser.com&domain_hint=testuser.com');
         });
 
@@ -403,7 +406,8 @@ describe('Adal', function () {
         adal.config.postLogoutRedirectUri = 'https://contoso.com/logout';
         spyOn(adal, 'promptUser');
         adal.logOut();
-        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + adal.config.tenant + '/oauth2/logout?post_logout_redirect_uri=https%3A%2F%2Fcontoso.com%2Flogout');
+        // zidal: changed logout endpoint, removed tenant
+        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/endsession?post_logout_redirect_uri=https%3A%2F%2Fcontoso.com%2Flogout');
     });
 
     it('uses common for tenant if not given at logout redirect', function () {
@@ -414,7 +418,8 @@ describe('Adal', function () {
         adal.config.postLogoutRedirectUri = 'https://contoso.com/logout';
         spyOn(adal, 'promptUser');
         adal.logOut();
-        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'common/oauth2/logout?post_logout_redirect_uri=https%3A%2F%2Fcontoso.com%2Flogout');
+        // zidal: changed logout endpoint, removed tenant
+        expect(adal.promptUser).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/endsession?post_logout_redirect_uri=https%3A%2F%2Fcontoso.com%2Flogout');
     });
 
     it('uses logout uri if given', function () {
@@ -697,7 +702,8 @@ describe('Adal', function () {
         }, 'iframe src not updated', 2000);
 
         runs(function () {
-            expect(mockFrames['adalIdTokenFrame'].src).toBe(DEFAULT_INSTANCE + conf.tenant + '/oauth2/authorize?response_type=id_token&client_id=' + adal.config.clientId + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Cclient'
+            // zidal: changed authorization endpoint, removed tenant
+            expect(mockFrames['adalIdTokenFrame'].src).toBe(DEFAULT_INSTANCE + 'connect/authorize?response_type=id_token&client_id=' + adal.config.clientId + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Cclient'
                 + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&prompt=none&login_hint=test%40testuser.com&domain_hint=testuser.com' + '&nonce=33333333-3333-4333-b333-333333333333');
         });
     });
@@ -768,15 +774,15 @@ describe('Adal', function () {
         adal._user = { profile: { 'upn': 'test@testuser.com' }, userName: 'test@domain.com' };
         spyOn(adal, '_loadFrameTimeout');
         adal.acquireToken(RESOURCE1, callback);
-        // ZData AS: removed tenant
-        expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + '/connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
+        // zidal: changed authorize endpoint, removed tenant
+        expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
             + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&prompt=none&login_hint=test%40testuser.com&domain_hint=testuser.com', 'adalRenewFrametoken.resource1', 'token.resource1');
 
         adal._activeRenewals = {};
         adal._user = { profile: { 'sub': 'test@testuser.com' }, userName: 'test@domain.com' };
         adal.acquireToken(RESOURCE1, callback);
-        // ZData AS: removed tenant
-        expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + '/connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
+        // zidal: changed authorize endpoint, removed tenant
+        expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=33333333-3333-4333-b333-333333333333%7Ctoken.resource1'
             + '&client-request-id=33333333-3333-4333-b333-333333333333' + adal._addLibMetadata() + '&prompt=none', 'adalRenewFrametoken.resource1', 'token.resource1');
     });
 
@@ -794,7 +800,7 @@ describe('Adal', function () {
         };
         spyOn(adal, '_loadFrameTimeout');
         adal.acquireToken(RESOURCE1, callback);
-        // ZData AS: removed tenant
+        // zidal: changed authorize endpoint, removed tenant
         expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=11111111-1111-4111-9111-111111111111%7Ctoken.resource1'
             + '&client-request-id=11111111-1111-4111-9111-111111111111' + adal._addLibMetadata() + '&prompt=none&login_hint=test%40testuser.com&domain_hint=testuser.com', 'adalRenewFrametoken.resource1', 'token.resource1');
 
@@ -804,7 +810,7 @@ describe('Adal', function () {
         adal._activeRenewals = {};
         adal._user = { profile: { 'sub': 'test@testuser.com' }, userName: 'test@domain.com' };
         adal.acquireToken(RESOURCE1, callback);
-        // ZData AS: removed tenant
+        // zidal: changed authorize endpoint, removed tenant
         expect(adal._loadFrameTimeout).toHaveBeenCalledWith(DEFAULT_INSTANCE + 'connect/authorize?response_type=token&client_id=client&resource=' + RESOURCE1 + '&redirect_uri=contoso_site&state=44444444-4444-4444-8444-444444444444%7Ctoken.resource1'
             + '&client-request-id=44444444-4444-4444-8444-444444444444' + adal._addLibMetadata() + '&prompt=none', 'adalRenewFrametoken.resource1', 'token.resource1');
 
