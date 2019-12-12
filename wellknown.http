@@ -1,0 +1,2 @@
+@instance = "id.zdata.no"
+GET https://{{instance}}/.well-known/openid-configuration

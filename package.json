@@ -49,6 +49,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jasmine-node tests/unit/spec"
+    "test": "jasmine-node tests/unit/spec",
+    "lint": "jshint lib"
   }
 }
